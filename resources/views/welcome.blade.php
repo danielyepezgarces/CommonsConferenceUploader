@@ -101,7 +101,7 @@
 
         <!-- Footer -->
         <footer>
-            <p>Powered by Laravel 12.x • Composer Only (No Node.js)</p>
+            <p>CommonsEventUploader &copy; 2025 Daniel Yepez Garces • Licensed under GPLv3</p>
         </footer>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>

@@ -137,7 +137,7 @@
                     </div>
                 </div>
                 <div style="border-top: 1px solid #334155; padding-top: 2rem; text-align: center; color: #94a3b8;">
-                    <p>Powered by Laravel 12.x • Composer Only (No Node.js) • Made with ❤️ for Wikimedia Commons</p>
+                    <p>CommonsEventUploader &copy; 2025 Daniel Yepez Garces • Licensed under GPLv3</p>
                 </div>
             </div>
         </footer>
