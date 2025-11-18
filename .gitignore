@@ -1,0 +1,54 @@
+# Environment
+.env
+.env.backup
+.env.production
+
+# LocalSettings (MediaWiki-style configuration)
+LocalSettings.php
+
+# Dependencies
+/vendor/
+composer.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Laravel
+/bootstrap/cache/*
+!bootstrap/cache/.gitkeep
+/storage/*.key
+/storage/logs/*.log
+*.log
+
+# Cache
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+!storage/framework/cache/.gitkeep
+!storage/framework/sessions/.gitkeep
+!storage/framework/views/.gitkeep
+
+# Public Storage
+/public/storage
+
+# Testing
+/phpunit.xml
+.phpunit.result.cache
+
+# Temporary files
+/tmp/
+*.tmp
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+storage/uploads/*
+!storage/uploads/.gitkeep

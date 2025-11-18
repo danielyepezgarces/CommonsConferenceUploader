@@ -1,0 +1,61 @@
+<?php
+
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ConferenceController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\StatsController;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\PublicController;
+use Illuminate\Support\Facades\Route;
+
+// Public routes (no authentication required)
+Route::get('/public/landing', [PublicController::class, 'index']);
+
+// Authentication routes
+Route::get('/auth/login', [AuthController::class, 'login']);
+Route::get('/auth/callback', [AuthController::class, 'callback']);
+Route::post('/auth/logout', [AuthController::class, 'logout']);
+Route::get('/auth/me', [AuthController::class, 'me']);
+
+// Event routes
+Route::get('/events', [EventController::class, 'index']);
+Route::get('/events/{id}', [EventController::class, 'show']);
+Route::post('/events', [EventController::class, 'create']);
+Route::put('/events/{id}', [EventController::class, 'update']);
+Route::delete('/events/{id}', [EventController::class, 'delete']);
+Route::get('/events/{id}/stats', [EventController::class, 'statistics']);
+
+// Upload routes
+Route::post('/events/{id}/upload', [UploadController::class, 'upload']);
+Route::get('/events/{id}/uploads', [UploadController::class, 'list']);
+Route::get('/uploads/my', [UploadController::class, 'myUploads']);
+
+// Category routes
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/search', [CategoryController::class, 'search']);
+Route::get('/categories/top', [CategoryController::class, 'top']);
+Route::get('/categories/{id}', [CategoryController::class, 'show']);
+Route::post('/categories', [CategoryController::class, 'create']);
+Route::put('/categories/{id}', [CategoryController::class, 'update']);
+Route::delete('/categories/{id}', [CategoryController::class, 'delete']);
+
+// Conference routes
+Route::get('/conferences', [ConferenceController::class, 'index']);
+Route::get('/conferences/{id}', [ConferenceController::class, 'show']);
+Route::post('/conferences', [ConferenceController::class, 'store']);
+Route::put('/conferences/{id}', [ConferenceController::class, 'update']);
+Route::delete('/conferences/{id}', [ConferenceController::class, 'delete']);
+Route::get('/conferences/{id}/stats', [ConferenceController::class, 'stats']);
+
+// Scheduled upload routes
+Route::post('/schedule/upload', [ScheduleController::class, 'schedule']);
+Route::get('/schedule/my', [ScheduleController::class, 'myScheduledUploads']);
+Route::get('/schedule/{id}', [ScheduleController::class, 'show']);
+Route::post('/schedule/{id}/cancel', [ScheduleController::class, 'cancel']);
+Route::get('/schedule/queue/status', [ScheduleController::class, 'queueStatus']);
+
+// Statistics routes
+Route::get('/stats/user', [StatsController::class, 'user']);
+Route::get('/stats/global', [StatsController::class, 'global']);

@@ -1,0 +1,77 @@
+# CommonsEventUploader Cron Job Examples
+# 
+# Copy this file to your crontab or cron.d directory
+# Edit paths and intervals as needed
+
+# ===========================
+# QUEUE PROCESSING
+# ===========================
+
+# Process scheduled upload queue every 5 minutes (RECOMMENDED)
+*/5 * * * * cd /path/to/CommonsConferenceUploader && /usr/bin/php process-queue.php >> storage/logs/queue.log 2>&1
+
+# Process with custom batch size every 10 minutes
+*/10 * * * * cd /path/to/CommonsConferenceUploader && /usr/bin/php process-queue.php --batch-size=20 >> storage/logs/queue.log 2>&1
+
+# Run as daemon (continuous processing) - Only use ONE of these approaches:
+# Option A: Cron-based (runs every 5 minutes, exits after processing)
+*/5 * * * * cd /path/to/CommonsConferenceUploader && /usr/bin/php process-queue.php
+
+# Option B: Daemon mode (runs continuously in background)
+# Start once via: nohup php process-queue.php --daemon >> storage/logs/queue.log 2>&1 &
+# Add this to system startup (e.g., /etc/rc.local or systemd)
+
+# ===========================
+# FILE CLEANUP (IMPORTANT!)
+# ===========================
+# These jobs prevent disk space issues by removing temporary files
+# Files are NEVER stored permanently - deleted immediately after upload
+
+# Cleanup temporary files every hour (removes files older than 24 hours)
+0 * * * * cd /path/to/CommonsConferenceUploader && /usr/bin/php cleanup-files.php >> storage/logs/cleanup.log 2>&1
+
+# Aggressive cleanup every hour (removes files older than 6 hours + cancelled uploads)
+0 * * * * cd /path/to/CommonsConferenceUploader && /usr/bin/php cleanup-files.php --hours=6 --cancelled >> storage/logs/cleanup.log 2>&1
+
+# Cleanup cancelled upload files daily at 3 AM
+0 3 * * * cd /path/to/CommonsConferenceUploader && /usr/bin/php cleanup-files.php --cancelled >> storage/logs/cleanup.log 2>&1
+
+# ===========================
+# SYSTEM MAINTENANCE
+# ===========================
+
+# Database update check (once per day at 3am)
+0 3 * * * cd /path/to/CommonsConferenceUploader && /usr/bin/php update.php >> storage/logs/update.log 2>&1
+
+# ===========================
+# COMBINED SETUP (RECOMMENDED FOR HEROKU/SMALL DISK)
+# ===========================
+
+# Process queue every 5 minutes
+*/5 * * * * cd /path/to/CommonsConferenceUploader && /usr/bin/php process-queue.php >> storage/logs/queue.log 2>&1
+
+# Aggressive cleanup every hour to minimize disk usage
+0 * * * * cd /path/to/CommonsConferenceUploader && /usr/bin/php cleanup-files.php --hours=6 --cancelled >> storage/logs/cleanup.log 2>&1
+
+# ===========================
+# HEROKU SCHEDULER EXAMPLES
+# ===========================
+# If using Heroku Scheduler (no traditional cron support):
+
+# Add these commands in Heroku Scheduler dashboard:
+
+# Every 10 minutes:
+# php process-queue.php
+
+# Hourly:
+# php cleanup-files.php --hours=6 --cancelled
+
+# ===========================
+# NOTES
+# ===========================
+# - process-queue.php: Uploads files to Wikimedia Commons
+# - cleanup-files.php: Removes temporary files to save disk space
+# - Files are deleted immediately after successful upload
+# - Failed uploads are deleted after max attempts (default: 3)
+# - Cancelled uploads can be cleaned up with --cancelled flag
+# - For Heroku/limited disk: Use aggressive cleanup (--hours=6)

@@ -1,0 +1,148 @@
+<?php
+
+/**
+ * LocalSettings.php - MediaWiki-style configuration override
+ * 
+ * This file allows you to override application settings without modifying
+ * .env or config files. Similar to MediaWiki's LocalSettings.php.
+ * 
+ * Copy this file to LocalSettings.php and customize as needed.
+ * LocalSettings.php is loaded after .env but before the application boots,
+ * allowing you to override any configuration value.
+ * 
+ * Usage:
+ * 1. Copy LocalSettings.php.example to LocalSettings.php
+ * 2. Uncomment and modify the settings you want to override
+ * 3. LocalSettings.php is git-ignored for security
+ */
+
+// ============================================================================
+// Application Settings
+// ============================================================================
+
+// Override application name
+// $GLOBALS['wgCommonsUploader']['app_name'] = 'My Custom Uploader';
+
+// Override application URL
+// $GLOBALS['wgCommonsUploader']['app_url'] = 'https://myuploader.example.com';
+
+// Enable/disable debug mode (true/false)
+// $GLOBALS['wgCommonsUploader']['debug'] = true;
+
+// Set timezone
+// $GLOBALS['wgCommonsUploader']['timezone'] = 'America/New_York';
+
+// ============================================================================
+// File Upload Settings
+// ============================================================================
+
+// Maximum upload size in bytes (default: 100MB)
+// $GLOBALS['wgCommonsUploader']['max_upload_size'] = 200 * 1024 * 1024; // 200MB
+
+// Allowed file extensions
+// $GLOBALS['wgCommonsUploader']['allowed_file_types'] = [
+//     'jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'tiff', 'pdf', 'djvu'
+// ];
+
+// ============================================================================
+// Database Settings
+// ============================================================================
+
+// Override database connection
+// $GLOBALS['wgCommonsUploader']['db_host'] = 'localhost';
+// $GLOBALS['wgCommonsUploader']['db_port'] = 3306;
+// $GLOBALS['wgCommonsUploader']['db_database'] = 'commons_uploader';
+// $GLOBALS['wgCommonsUploader']['db_username'] = 'root';
+// $GLOBALS['wgCommonsUploader']['db_password'] = '';
+
+// ============================================================================
+// OAuth 2.0 Settings (Wikimedia)
+// ============================================================================
+
+// Override OAuth client credentials
+// $GLOBALS['wgCommonsUploader']['oauth_client_id'] = 'your_client_id';
+// $GLOBALS['wgCommonsUploader']['oauth_client_secret'] = 'your_client_secret';
+// $GLOBALS['wgCommonsUploader']['oauth_redirect_uri'] = 'https://myuploader.example.com/auth/callback';
+
+// Override OAuth endpoints (advanced)
+// $GLOBALS['wgCommonsUploader']['oauth_authorization_endpoint'] = 'https://meta.wikimedia.org/w/rest.php/oauth2/authorize';
+// $GLOBALS['wgCommonsUploader']['oauth_token_endpoint'] = 'https://meta.wikimedia.org/w/rest.php/oauth2/access_token';
+// $GLOBALS['wgCommonsUploader']['oauth_userinfo_endpoint'] = 'https://meta.wikimedia.org/w/rest.php/oauth2/resource/profile';
+// $GLOBALS['wgCommonsUploader']['oauth_scopes'] = 'basic profile highvolume';
+
+// ============================================================================
+// Wikimedia Commons API Settings
+// ============================================================================
+
+// Override Commons API URL
+// $GLOBALS['wgCommonsUploader']['commons_api_url'] = 'https://commons.wikimedia.org/w/api.php';
+
+// ============================================================================
+// Session Settings
+// ============================================================================
+
+// Session driver (file, database, redis, etc.)
+// $GLOBALS['wgCommonsUploader']['session_driver'] = 'file';
+
+// Session lifetime in minutes
+// $GLOBALS['wgCommonsUploader']['session_lifetime'] = 120;
+
+// ============================================================================
+// Cache Settings
+// ============================================================================
+
+// Cache driver (file, database, redis, memcached, etc.)
+// $GLOBALS['wgCommonsUploader']['cache_driver'] = 'file';
+
+// ============================================================================
+// Logging Settings
+// ============================================================================
+
+// Log channel (stack, single, daily, etc.)
+// $GLOBALS['wgCommonsUploader']['log_channel'] = 'stack';
+
+// Log level (debug, info, notice, warning, error, critical, alert, emergency)
+// $GLOBALS['wgCommonsUploader']['log_level'] = 'debug';
+
+// ============================================================================
+// Custom Settings
+// ============================================================================
+
+// You can add your own custom settings here
+// $GLOBALS['wgCommonsUploader']['my_custom_setting'] = 'custom_value';
+
+// ============================================================================
+// Advanced: Direct Environment Variable Override
+// ============================================================================
+
+// You can also directly set environment variables if needed
+// putenv('APP_NAME=My Custom Uploader');
+// putenv('APP_DEBUG=true');
+// $_ENV['APP_NAME'] = 'My Custom Uploader';
+// $_SERVER['APP_NAME'] = 'My Custom Uploader';
+
+// ============================================================================
+// Hook System (Advanced)
+// ============================================================================
+
+// You can define hooks that will be called at various points
+// $GLOBALS['wgCommonsUploader']['hooks']['beforeUpload'][] = function($upload) {
+//     // Custom logic before file upload
+// };
+//
+// $GLOBALS['wgCommonsUploader']['hooks']['afterUpload'][] = function($upload, $result) {
+//     // Custom logic after file upload
+// };
+
+// ============================================================================
+// Feature Flags
+// ============================================================================
+
+// Enable or disable features
+// $GLOBALS['wgCommonsUploader']['features']['enable_category_autocomplete'] = true;
+// $GLOBALS['wgCommonsUploader']['features']['enable_statistics_dashboard'] = true;
+// $GLOBALS['wgCommonsUploader']['features']['enable_event_analytics'] = true;
+
+// ============================================================================
+// Do not edit below this line unless you know what you're doing
+// ============================================================================
