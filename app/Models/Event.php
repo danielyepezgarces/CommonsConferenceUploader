@@ -126,7 +126,7 @@ class Event
         return $stmt->fetch() ?: [];
     }
 
-    private static function hydrate(array $data): self
+    public static function hydrate(array $data): self
     {
         $event = new self();
         $event->id = (int) $data['id'];

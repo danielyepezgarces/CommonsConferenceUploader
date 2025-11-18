@@ -140,7 +140,7 @@ class Upload
         return $stmt->fetch() ?: [];
     }
 
-    private static function hydrate(array $data): self
+    public static function hydrate(array $data): self
     {
         $upload = new self();
         $upload->id = (int) $data['id'];

@@ -107,7 +107,7 @@ class Category
         return $stmt->execute([$this->id]);
     }
 
-    private static function hydrate(array $data): self
+    public static function hydrate(array $data): self
     {
         $category = new self();
         $category->id = (int) $data['id'];

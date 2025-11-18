@@ -102,7 +102,7 @@ class User
         return $stmt->fetch() ?: [];
     }
 
-    private static function hydrate(array $data): self
+    public static function hydrate(array $data): self
     {
         $user = new self();
         $user->id = (int) $data['id'];
