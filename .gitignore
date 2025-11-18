@@ -1,9 +1,13 @@
 # Environment
 .env
+.env.backup
+.env.production
 
 # Dependencies
 /vendor/
+/node_modules/
 composer.lock
+package-lock.json
 
 # IDE
 .idea/
@@ -16,8 +20,11 @@ composer.lock
 .DS_Store
 Thumbs.db
 
-# Logs
-storage/logs/*.log
+# Laravel
+/bootstrap/cache/*
+!bootstrap/cache/.gitkeep
+/storage/*.key
+/storage/logs/*.log
 *.log
 
 # Cache
@@ -27,6 +34,15 @@ storage/framework/views/*
 !storage/framework/cache/.gitkeep
 !storage/framework/sessions/.gitkeep
 !storage/framework/views/.gitkeep
+
+# Vite
+/public/hot
+/public/build
+/public/storage
+
+# Testing
+/phpunit.xml
+.phpunit.result.cache
 
 # Temporary files
 /tmp/

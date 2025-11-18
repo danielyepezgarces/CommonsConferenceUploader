@@ -1,9 +1,11 @@
 # CommonsEventUploader
 
-A web application built with PHP 8.x for uploading conference-related images to Wikimedia Commons. Features OAuth 2.0 authentication, role-based access control, event management, and comprehensive statistics.
+A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading conference-related images to Wikimedia Commons. Features OAuth 2.0 authentication, role-based access control, event management, and comprehensive statistics with a beautiful **Tailwind CSS** interface.
 
 ## Features
 
+- **Laravel 12.x Framework** - Modern PHP framework with elegant syntax
+- **Tailwind CSS** - Beautiful, responsive UI with Vite build system (no CDN)
 - **OAuth 2.0 Authentication** with Wikimedia Commons
 - **Role-Based Access Control** (user, conference_admin, super_admin)
 - **Event Management** - Create and manage conference events
@@ -15,10 +17,10 @@ A web application built with PHP 8.x for uploading conference-related images to 
 
 ## Requirements
 
-- PHP 8.1 or higher
+- PHP 8.2 or higher
 - MySQL 5.7 or higher
-- Composer
-- Web server (Apache, Nginx, or PHP built-in server)
+- Composer 2.0+
+- Node.js 18+ and npm
 - Wikimedia OAuth 2.0 credentials
 
 ## Installation
@@ -29,33 +31,46 @@ A web application built with PHP 8.x for uploading conference-related images to 
    cd CommonsConferenceUploader
    ```
 
-2. **Install dependencies:**
+2. **Install PHP dependencies:**
    ```bash
    composer install
    ```
 
-3. **Configure environment:**
+3. **Install Node dependencies:**
+   ```bash
+   npm install
+   ```
+
+4. **Build frontend assets:**
+   ```bash
+   npm run build
+   ```
+   
+   For development with hot reload:
+   ```bash
+   npm run dev
+   ```
+
+5. **Configure environment:**
    ```bash
    cp .env.example .env
-   # Generate application key
-   php generate-key.php
-   # Add the generated key to .env
+   php artisan key:generate
    # Edit .env with your database and OAuth credentials
    ```
 
-4. **Create database:**
+6. **Create database:**
    ```bash
    mysql -u root -p -e "CREATE DATABASE commons_uploader CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
    ```
 
-5. **Run migrations:**
+7. **Run migrations:**
    ```bash
    php migrate.php
    ```
 
-6. **Start the server:**
+8. **Start the server:**
    ```bash
-   php -S localhost:8000 -t public
+   php artisan serve
    ```
 
 7. **Open in browser:**
@@ -173,11 +188,13 @@ A web application built with PHP 8.x for uploading conference-related images to 
 
 ## Tech Stack
 
-- **Backend**: PHP 8.3
-- **Database**: MySQL with PDO
+- **Framework**: Laravel 12.x
+- **Backend**: PHP 8.2+
+- **Database**: MySQL with Eloquent ORM
 - **HTTP Client**: GuzzleHTTP
-- **Frontend**: HTML, Tailwind CSS, Vanilla JavaScript
-- **Architecture**: MVC with Service Layer
+- **Frontend**: Tailwind CSS 3.4, Vanilla JavaScript
+- **Build Tool**: Vite 6.0
+- **Architecture**: Laravel MVC with Service Layer
 
 ## File Structure
 

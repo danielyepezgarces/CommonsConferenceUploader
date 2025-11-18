@@ -1,43 +1,40 @@
 <?php
 
-/**
- * API Routes for CommonsEventUploader
- * 
- * All routes return JSON responses
- */
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\StatsController;
+use App\Http\Controllers\UploadController;
+use Illuminate\Support\Facades\Route;
 
-$routes = [
-    // Authentication routes
-    'GET /auth/login' => ['AuthController', 'login'],
-    'GET /auth/callback' => ['AuthController', 'callback'],
-    'POST /auth/logout' => ['AuthController', 'logout'],
-    'GET /auth/me' => ['AuthController', 'me'],
+// Authentication routes
+Route::get('/auth/login', [AuthController::class, 'login']);
+Route::get('/auth/callback', [AuthController::class, 'callback']);
+Route::post('/auth/logout', [AuthController::class, 'logout']);
+Route::get('/auth/me', [AuthController::class, 'me']);
 
-    // Event routes
-    'GET /events' => ['EventController', 'index'],
-    'GET /events/{id}' => ['EventController', 'show'],
-    'POST /events' => ['EventController', 'create'],
-    'PUT /events/{id}' => ['EventController', 'update'],
-    'DELETE /events/{id}' => ['EventController', 'delete'],
-    'GET /events/{id}/stats' => ['EventController', 'statistics'],
+// Event routes
+Route::get('/events', [EventController::class, 'index']);
+Route::get('/events/{id}', [EventController::class, 'show']);
+Route::post('/events', [EventController::class, 'create']);
+Route::put('/events/{id}', [EventController::class, 'update']);
+Route::delete('/events/{id}', [EventController::class, 'delete']);
+Route::get('/events/{id}/stats', [EventController::class, 'statistics']);
 
-    // Upload routes
-    'POST /events/{id}/upload' => ['UploadController', 'upload'],
-    'GET /events/{id}/uploads' => ['UploadController', 'list'],
-    'GET /uploads/my' => ['UploadController', 'myUploads'],
+// Upload routes
+Route::post('/events/{id}/upload', [UploadController::class, 'upload']);
+Route::get('/events/{id}/uploads', [UploadController::class, 'list']);
+Route::get('/uploads/my', [UploadController::class, 'myUploads']);
 
-    // Category routes
-    'GET /categories' => ['CategoryController', 'index'],
-    'GET /categories/search' => ['CategoryController', 'search'],
-    'GET /categories/top' => ['CategoryController', 'top'],
-    'GET /categories/{id}' => ['CategoryController', 'show'],
-    'POST /categories' => ['CategoryController', 'create'],
-    'PUT /categories/{id}' => ['CategoryController', 'update'],
-    'DELETE /categories/{id}' => ['CategoryController', 'delete'],
+// Category routes
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/search', [CategoryController::class, 'search']);
+Route::get('/categories/top', [CategoryController::class, 'top']);
+Route::get('/categories/{id}', [CategoryController::class, 'show']);
+Route::post('/categories', [CategoryController::class, 'create']);
+Route::put('/categories/{id}', [CategoryController::class, 'update']);
+Route::delete('/categories/{id}', [CategoryController::class, 'delete']);
 
-    // Statistics routes
-    'GET /stats/user' => ['StatsController', 'user'],
-    'GET /stats/global' => ['StatsController', 'global'],
-];
-
-return $routes;
+// Statistics routes
+Route::get('/stats/user', [StatsController::class, 'user']);
+Route::get('/stats/global', [StatsController::class, 'global']);
