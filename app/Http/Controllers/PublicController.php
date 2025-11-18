@@ -20,6 +20,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Conference;
 use App\Models\Upload;
 use App\Models\Category;
 use App\Database;
@@ -30,6 +31,24 @@ class PublicController
     {
         // Get public statistics (no authentication required)
         $db = Database::getInstance();
+        
+        // Get recent conferences (last 5, published only)
+        $conferencesStmt = $db->prepare("
+            SELECT c.*, u.username as creator_name,
+                   COUNT(DISTINCT e.id) as event_count,
+                   COUNT(DISTINCT up.id) as upload_count,
+                   COUNT(DISTINCT up.user_id) as participant_count
+            FROM conferences c
+            LEFT JOIN users u ON c.created_by = u.id
+            LEFT JOIN events e ON c.id = e.conference_id
+            LEFT JOIN uploads up ON e.id = up.event_id
+            WHERE c.status = 'published'
+            GROUP BY c.id
+            ORDER BY c.start_date DESC
+            LIMIT 5
+        ");
+        $conferencesStmt->execute();
+        $conferences = $conferencesStmt->fetchAll(\PDO::FETCH_ASSOC);
         
         // Get recent events (last 10)
         $eventsStmt = $db->prepare("
@@ -80,6 +99,7 @@ class PublicController
         
         // Pass data to view
         $data = [
+            'conferences' => $conferences,
             'events' => $events,
             'stats' => $globalStats,
             'topCategories' => $topCategories,

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ConferenceController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\UploadController;
@@ -38,6 +39,14 @@ Route::get('/categories/{id}', [CategoryController::class, 'show']);
 Route::post('/categories', [CategoryController::class, 'create']);
 Route::put('/categories/{id}', [CategoryController::class, 'update']);
 Route::delete('/categories/{id}', [CategoryController::class, 'delete']);
+
+// Conference routes
+Route::get('/conferences', [ConferenceController::class, 'index']);
+Route::get('/conferences/{id}', [ConferenceController::class, 'show']);
+Route::post('/conferences', [ConferenceController::class, 'store']);
+Route::put('/conferences/{id}', [ConferenceController::class, 'update']);
+Route::delete('/conferences/{id}', [ConferenceController::class, 'delete']);
+Route::get('/conferences/{id}/stats', [ConferenceController::class, 'stats']);
 
 // Statistics routes
 Route::get('/stats/user', [StatsController::class, 'user']);

@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS conferences (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    location VARCHAR(255),
+    website_url VARCHAR(500),
+    logo_url VARCHAR(500),
+    wikidata_id VARCHAR(100),
+    organizer_name VARCHAR(255),
+    organizer_email VARCHAR(255),
+    status ENUM('draft', 'published', 'archived') DEFAULT 'draft',
+    created_by INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT,
+    INDEX idx_slug (slug),
+    INDEX idx_status (status),
+    INDEX idx_dates (start_date, end_date),
+    INDEX idx_created_by (created_by)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
