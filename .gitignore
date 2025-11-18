@@ -8,9 +8,7 @@ LocalSettings.php
 
 # Dependencies
 /vendor/
-/node_modules/
 composer.lock
-package-lock.json
 
 # IDE
 .idea/
@@ -38,9 +36,7 @@ storage/framework/views/*
 !storage/framework/sessions/.gitkeep
 !storage/framework/views/.gitkeep
 
-# Vite
-/public/hot
-/public/build
+# Public Storage
 /public/storage
 
 # Testing

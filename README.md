@@ -1,11 +1,12 @@
 # CommonsEventUploader
 
-A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading conference-related images to Wikimedia Commons. Features OAuth 2.0 authentication, role-based access control, event management, and comprehensive statistics with a beautiful **Tailwind CSS** interface.
+A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading conference-related images to Wikimedia Commons. Features OAuth 2.0 authentication, role-based access control, event management, and comprehensive statistics with a beautiful **custom CSS** interface.
 
 ## Features
 
 - **Laravel 12.x Framework** - Modern PHP framework with elegant syntax
-- **Tailwind CSS** - Beautiful, responsive UI with Vite build system (no CDN)
+- **Composer Only** - No Node.js or build process required
+- **Custom CSS** - Beautiful, responsive UI with standalone CSS (no dependencies)
 - **MediaWiki-style LocalSettings** - Familiar configuration pattern for MediaWiki users
 - **OAuth 2.0 Authentication** with Wikimedia Commons
 - **Role-Based Access Control** (user, conference_admin, super_admin)
@@ -21,8 +22,9 @@ A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading con
 - PHP 8.2 or higher
 - MySQL 5.7 or higher
 - Composer 2.0+
-- Node.js 18+ and npm
 - Wikimedia OAuth 2.0 credentials
+
+**Note:** No Node.js or npm required! This application uses only Composer and PHP.
 
 ## Installation
 
@@ -37,22 +39,7 @@ A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading con
    composer install
    ```
 
-3. **Install Node dependencies:**
-   ```bash
-   npm install
-   ```
-
-4. **Build frontend assets:**
-   ```bash
-   npm run build
-   ```
-   
-   For development with hot reload:
-   ```bash
-   npm run dev
-   ```
-
-5. **Configure environment:**
+3. **Configure environment:**
    ```bash
    cp .env.example .env
    php artisan key:generate
@@ -66,17 +53,17 @@ A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading con
    # See LocalSettings.md for complete documentation
    ```
 
-6. **Create database:**
+4. **Create database:**
    ```bash
    mysql -u root -p -e "CREATE DATABASE commons_uploader CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
    ```
 
-7. **Run migrations:**
+5. **Run migrations:**
    ```bash
    php migrate.php
    ```
 
-8. **Start the server:**
+6. **Start the server:**
    ```bash
    php artisan serve
    ```
@@ -236,10 +223,10 @@ You can also use standard Laravel `.env` configuration. See [.env.example](.env.
 
 - **Framework**: Laravel 12.x
 - **Backend**: PHP 8.2+
-- **Database**: MySQL with Eloquent ORM
+- **Database**: MySQL with PDO
 - **HTTP Client**: GuzzleHTTP
-- **Frontend**: Tailwind CSS 3.4, Vanilla JavaScript
-- **Build Tool**: Vite 6.0
+- **Frontend**: Custom CSS, Vanilla JavaScript
+- **Build Tool**: None (Composer only)
 - **Architecture**: Laravel MVC with Service Layer
 
 ## File Structure
