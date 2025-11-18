@@ -70,6 +70,13 @@
     <script>
         let currentUser = null;
 
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         // Check if user is logged in
         async function checkAuth() {
             try {
@@ -96,8 +103,8 @@
         function showDashboard() {
             document.getElementById('auth-section').innerHTML = `
                 <div class="flex items-center space-x-4">
-                    <span class="text-gray-700">Welcome, ${currentUser.username}!</span>
-                    <span class="text-sm text-gray-500">(${currentUser.role})</span>
+                    <span class="text-gray-700">Welcome, ${escapeHtml(currentUser.username)}!</span>
+                    <span class="text-sm text-gray-500">(${escapeHtml(currentUser.role)})</span>
                     <button onclick="logout()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Logout
                     </button>
@@ -139,10 +146,10 @@
 
             container.innerHTML = events.map(event => `
                 <div class="border-b border-gray-200 py-4">
-                    <h3 class="text-lg font-semibold text-gray-900">${event.title}</h3>
-                    <p class="text-gray-600">${event.description || 'No description'}</p>
+                    <h3 class="text-lg font-semibold text-gray-900">${escapeHtml(event.title)}</h3>
+                    <p class="text-gray-600">${escapeHtml(event.description || 'No description')}</p>
                     <p class="text-sm text-gray-500 mt-2">
-                        ${event.start_date} to ${event.end_date}
+                        ${escapeHtml(event.start_date)} to ${escapeHtml(event.end_date)}
                     </p>
                 </div>
             `).join('');

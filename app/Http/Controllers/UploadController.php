@@ -204,13 +204,7 @@ class UploadController
 
     private function getAccessToken(int $userId): ?string
     {
-        $pdo = \App\Database::getConnection();
-        $stmt = $pdo->prepare('SELECT access_token_hash FROM oauth_tokens WHERE user_id = ? AND expires_at > NOW() ORDER BY created_at DESC LIMIT 1');
-        $stmt->execute([$userId]);
-        $result = $stmt->fetch();
-
-        // Note: In production, you'd need to store and retrieve the actual token securely
-        // This is a simplified version
-        return $result ? $result['access_token_hash'] : null;
+        $oauthService = new \App\Services\OAuthService();
+        return $oauthService->getToken($userId);
     }
 }

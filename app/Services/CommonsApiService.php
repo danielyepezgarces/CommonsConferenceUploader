@@ -131,7 +131,28 @@ class CommonsApiService
             return false;
         }
 
+        // Validate extension
         $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-        return in_array($extension, $allowedTypes, true);
+        if (!in_array($extension, $allowedTypes, true)) {
+            return false;
+        }
+
+        // Validate MIME type
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $filePath);
+        finfo_close($finfo);
+
+        $allowedMimeTypes = [
+            'image/jpeg',
+            'image/jpg',
+            'image/png',
+            'image/gif',
+            'image/svg+xml',
+            'image/webp',
+            'image/tiff',
+            'application/pdf'
+        ];
+
+        return in_array($mimeType, $allowedMimeTypes, true);
     }
 }

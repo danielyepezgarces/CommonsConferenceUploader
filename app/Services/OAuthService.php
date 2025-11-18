@@ -67,9 +67,9 @@ class OAuthService
     {
         $pdo = Database::getConnection();
         
-        // Hash tokens before storing
-        $accessTokenHash = hash('sha256', $accessToken);
-        $refreshTokenHash = $refreshToken ? hash('sha256', $refreshToken) : null;
+        // Encrypt tokens before storing
+        $accessTokenEncrypted = $this->encryptToken($accessToken);
+        $refreshTokenEncrypted = $refreshToken ? $this->encryptToken($refreshToken) : null;
         $expiresAt = date('Y-m-d H:i:s', time() + $expiresIn);
 
         // Delete old tokens for this user
@@ -81,7 +81,52 @@ class OAuthService
             'INSERT INTO oauth_tokens (user_id, access_token_hash, refresh_token_hash, expires_at) 
              VALUES (?, ?, ?, ?)'
         );
-        $stmt->execute([$userId, $accessTokenHash, $refreshTokenHash, $expiresAt]);
+        $stmt->execute([$userId, $accessTokenEncrypted, $refreshTokenEncrypted, $expiresAt]);
+    }
+
+    public function getToken(int $userId): ?string
+    {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare('SELECT access_token_hash FROM oauth_tokens WHERE user_id = ? AND expires_at > NOW() ORDER BY created_at DESC LIMIT 1');
+        $stmt->execute([$userId]);
+        $result = $stmt->fetch();
+
+        if (!$result) {
+            return null;
+        }
+
+        return $this->decryptToken($result['access_token_hash']);
+    }
+
+    private function encryptToken(string $token): string
+    {
+        $config = require __DIR__ . '/../../config/app.php';
+        $key = $config['key'];
+        
+        if (empty($key)) {
+            throw new \RuntimeException('APP_KEY not set. Generate one with: openssl rand -base64 32');
+        }
+
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt($token, 'aes-256-cbc', $key, 0, $iv);
+        
+        // Combine IV and encrypted data, then base64 encode
+        return base64_encode($iv . '::' . $encrypted);
+    }
+
+    private function decryptToken(string $encryptedToken): string
+    {
+        $config = require __DIR__ . '/../../config/app.php';
+        $key = $config['key'];
+        
+        if (empty($key)) {
+            throw new \RuntimeException('APP_KEY not set');
+        }
+
+        $data = base64_decode($encryptedToken);
+        list($iv, $encrypted) = explode('::', $data, 2);
+        
+        return openssl_decrypt($encrypted, 'aes-256-cbc', $key, 0, $iv);
     }
 
     public function authenticateUser(array $userInfo, string $accessToken, ?string $refreshToken = null, int $expiresIn = 3600): User

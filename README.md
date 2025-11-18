@@ -37,6 +37,9 @@ A web application built with PHP 8.x for uploading conference-related images to 
 3. **Configure environment:**
    ```bash
    cp .env.example .env
+   # Generate application key
+   php generate-key.php
+   # Add the generated key to .env
    # Edit .env with your database and OAuth credentials
    ```
 
@@ -47,7 +50,7 @@ A web application built with PHP 8.x for uploading conference-related images to 
 
 5. **Run migrations:**
    ```bash
-   php -r "require 'vendor/autoload.php'; \App\Database::runMigrations();"
+   php migrate.php
    ```
 
 6. **Start the server:**
