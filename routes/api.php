@@ -5,7 +5,11 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
+
+// Public routes (no authentication required)
+Route::get('/public/landing', [PublicController::class, 'index']);
 
 // Authentication routes
 Route::get('/auth/login', [AuthController::class, 'login']);

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CommonsEventUploader - Upload Conference Images to Wikimedia Commons</title>
+    <meta name="description" content="A web application for uploading conference-related images to Wikimedia Commons. Join thousands of contributors sharing knowledge through images.">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+</head>
+<body>
+    <div class="min-h-screen">
+        <!-- Hero Section -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4rem 2rem;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <svg style="width: 2.5rem; height: 2.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <h1 style="font-size: 1.875rem; font-weight: 700;">CommonsEventUploader</h1>
+                    </div>
+                    <button onclick="window.location.href='/api/auth/login'" class="btn" style="background: white; color: #667eea; font-weight: 600; padding: 0.75rem 2rem;">
+                        <svg style="width: 1.25rem; height: 1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                        </svg>
+                        Login with Wikimedia
+                    </button>
+                </div>
+                
+                <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                    <h2 style="font-size: 3rem; font-weight: 800; margin-bottom: 1.5rem; line-height: 1.2;">
+                        Share Your Conference Photos with the World
+                    </h2>
+                    <p style="font-size: 1.25rem; opacity: 0.95; margin-bottom: 2rem; line-height: 1.6;">
+                        Upload conference-related images to Wikimedia Commons and contribute to the world's largest free knowledge repository. Join thousands of contributors making knowledge accessible to everyone.
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="window.location.href='/api/auth/login'" class="btn btn-primary" style="font-size: 1.125rem; padding: 1rem 2.5rem;">
+                            Get Started
+                        </button>
+                        <button onclick="scrollToSection('events')" class="btn" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white; font-size: 1.125rem; padding: 1rem 2.5rem;">
+                            Explore Events
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div style="padding: 3rem 2rem; background: #f7fafc;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <div id="global-stats-grid" class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <!-- Stats will be loaded via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Section -->
+        <div id="events" style="padding: 4rem 2rem; max-width: 1200px; margin: 0 auto;">
+            <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">Recent Events</h2>
+            <p style="text-align: center; color: #64748b; font-size: 1.125rem; margin-bottom: 3rem;">
+                Discover conferences and events where contributors share their photos
+            </p>
+            <div id="events-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+                <!-- Events will be loaded via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Top Categories Section -->
+        <div style="padding: 4rem 2rem; background: #f7fafc;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">Top Categories</h2>
+                <p style="text-align: center; color: #64748b; font-size: 1.125rem; margin-bottom: 3rem;">
+                    Most popular categories for uploaded images
+                </p>
+                <div id="categories-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <!-- Categories will be loaded via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Uploads Section -->
+        <div style="padding: 4rem 2rem;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; text-align: center;">Recent Uploads</h2>
+                <p style="text-align: center; color: #64748b; font-size: 1.125rem; margin-bottom: 3rem;">
+                    Latest images uploaded to Wikimedia Commons
+                </p>
+                <div id="recent-uploads-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- Recent uploads will be loaded via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4rem 2rem; text-align: center;">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h2 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">Ready to Contribute?</h2>
+                <p style="font-size: 1.25rem; opacity: 0.95; margin-bottom: 2rem;">
+                    Login with your Wikimedia account and start uploading conference photos today.
+                </p>
+                <button onclick="window.location.href='/api/auth/login'" class="btn" style="background: white; color: #667eea; font-weight: 600; padding: 1rem 3rem; font-size: 1.125rem;">
+                    <svg style="width: 1.25rem; height: 1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                    </svg>
+                    Login with Wikimedia
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer style="background: #1e293b; color: white; padding: 3rem 2rem;">
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">About</h3>
+                        <p style="color: #94a3b8; line-height: 1.6;">
+                            CommonsEventUploader makes it easy to upload conference-related images to Wikimedia Commons with OAuth 2.0 authentication and role-based permissions.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Features</h3>
+                        <ul style="color: #94a3b8; line-height: 2;">
+                            <li>OAuth 2.0 Authentication</li>
+                            <li>Event Management</li>
+                            <li>Category Organization</li>
+                            <li>Upload Statistics</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Resources</h3>
+                        <ul style="color: #94a3b8; line-height: 2;">
+                            <li><a href="/api-docs" style="color: #94a3b8; text-decoration: underline;">API Documentation</a></li>
+                            <li><a href="https://commons.wikimedia.org" target="_blank" style="color: #94a3b8; text-decoration: underline;">Wikimedia Commons</a></li>
+                            <li><a href="https://github.com" style="color: #94a3b8; text-decoration: underline;">GitHub Repository</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="border-top: 1px solid #334155; padding-top: 2rem; text-align: center; color: #94a3b8;">
+                    <p>Powered by Laravel 12.x • Composer Only (No Node.js) • Made with ❤️ for Wikimedia Commons</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Scroll to section
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // HTML escape function
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Format number with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        // Load landing page data
+        async function loadLandingData() {
+            try {
+                const response = await fetch('/api/public/landing');
+                const data = await response.json();
+
+                // Render global stats
+                renderGlobalStats(data.stats);
+                
+                // Render events
+                renderEvents(data.events);
+                
+                // Render top categories
+                renderTopCategories(data.topCategories);
+                
+                // Render recent uploads
+                renderRecentUploads(data.recentUploads);
+            } catch (error) {
+                console.error('Error loading landing data:', error);
+            }
+        }
+
+        function renderGlobalStats(stats) {
+            const statsGrid = document.getElementById('global-stats-grid');
+            statsGrid.innerHTML = `
+                <div class="stat-card blue">
+                    <div>
+                        <h3>Total Uploads</h3>
+                        <div class="stat-number">${formatNumber(stats.total_uploads || 0)}</div>
+                    </div>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                    </svg>
+                </div>
+                <div class="stat-card green">
+                    <div>
+                        <h3>Successful Uploads</h3>
+                        <div class="stat-number">${formatNumber(stats.successful_uploads || 0)}</div>
+                    </div>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="stat-card purple">
+                    <div>
+                        <h3>Total Events</h3>
+                        <div class="stat-number">${formatNumber(stats.total_events || 0)}</div>
+                    </div>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div>
+                        <h3>Contributors</h3>
+                        <div class="stat-number">${formatNumber(stats.total_contributors || 0)}</div>
+                    </div>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+            `;
+        }
+
+        function renderEvents(events) {
+            const eventsGrid = document.getElementById('events-grid');
+            
+            if (!events || events.length === 0) {
+                eventsGrid.innerHTML = '<p style="text-align: center; color: #64748b; grid-column: 1/-1;">No events yet. Be the first to create one!</p>';
+                return;
+            }
+
+            eventsGrid.innerHTML = events.map(event => `
+                <div class="card" style="border-left: 4px solid #667eea;">
+                    <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                        <svg style="width: 2rem; height: 2rem; color: #667eea; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <div style="flex: 1;">
+                            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">${escapeHtml(event.title)}</h3>
+                            <p style="color: #64748b; font-size: 0.875rem;">Created by ${escapeHtml(event.creator_name || 'Unknown')}</p>
+                        </div>
+                    </div>
+                    ${event.description ? `<p style="color: #475569; margin-bottom: 1rem; line-height: 1.6;">${escapeHtml(event.description)}</p>` : ''}
+                    <div style="display: flex; gap: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+                        <div>
+                            <div style="font-size: 0.875rem; color: #64748b;">Uploads</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #667eea;">${formatNumber(event.upload_count || 0)}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.875rem; color: #64748b;">Participants</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">${formatNumber(event.participant_count || 0)}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTopCategories(categories) {
+            const categoriesList = document.getElementById('categories-list');
+            
+            if (!categories || categories.length === 0) {
+                categoriesList.innerHTML = '<p style="text-align: center; color: #64748b; grid-column: 1/-1;">No categories yet.</p>';
+                return;
+            }
+
+            categoriesList.innerHTML = categories.map((cat, index) => `
+                <div class="card" style="text-align: center; background: linear-gradient(135deg, ${getCategoryColor(index)} 0%, ${getCategoryColor(index, true)} 100%); color: white;">
+                    <div style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">${formatNumber(cat.total_uploads || 0)}</div>
+                    <div style="font-size: 1rem; opacity: 0.95;">${escapeHtml(cat.name)}</div>
+                </div>
+            `).join('');
+        }
+
+        function getCategoryColor(index, light = false) {
+            const colors = [
+                light ? ['#667eea', '#764ba2'] : ['#667eea', '#764ba2'],
+                light ? ['#f093fb', '#f5576c'] : ['#f093fb', '#f5576c'],
+                light ? ['#4facfe', '#00f2fe'] : ['#4facfe', '#00f2fe'],
+                light ? ['#43e97b', '#38f9d7'] : ['#43e97b', '#38f9d7'],
+                light ? ['#fa709a', '#fee140'] : ['#fa709a', '#fee140']
+            ];
+            const colorPair = colors[index % colors.length];
+            return light ? colorPair[1] : colorPair[0];
+        }
+
+        function renderRecentUploads(uploads) {
+            const uploadsList = document.getElementById('recent-uploads-list');
+            
+            if (!uploads || uploads.length === 0) {
+                uploadsList.innerHTML = '<p style="text-align: center; color: #64748b; grid-column: 1/-1;">No uploads yet.</p>';
+                return;
+            }
+
+            uploadsList.innerHTML = uploads.map(upload => `
+                <div class="card" style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 4rem; height: 4rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <svg style="width: 2rem; height: 2rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="font-weight: 600; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <a href="https://commons.wikimedia.org/wiki/File:${escapeHtml(upload.commons_filename)}" target="_blank" style="color: #667eea; text-decoration: none;">
+                                ${escapeHtml(upload.commons_filename)}
+                            </a>
+                        </div>
+                        <div style="font-size: 0.875rem; color: #64748b;">
+                            by ${escapeHtml(upload.username || 'Unknown')} • ${formatDate(upload.created_at)}
+                        </div>
+                        ${upload.event_title ? `<div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem;">${escapeHtml(upload.event_title)}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadLandingData);
+    </script>
+</body>
+</html>
