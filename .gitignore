@@ -50,3 +50,5 @@ storage/framework/views/*
 # Uploads
 uploads/*
 !uploads/.gitkeep
+storage/uploads/*
+!storage/uploads/.gitkeep

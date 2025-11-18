@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ConferenceController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\PublicController;
@@ -47,6 +48,13 @@ Route::post('/conferences', [ConferenceController::class, 'store']);
 Route::put('/conferences/{id}', [ConferenceController::class, 'update']);
 Route::delete('/conferences/{id}', [ConferenceController::class, 'delete']);
 Route::get('/conferences/{id}/stats', [ConferenceController::class, 'stats']);
+
+// Scheduled upload routes
+Route::post('/schedule/upload', [ScheduleController::class, 'schedule']);
+Route::get('/schedule/my', [ScheduleController::class, 'myScheduledUploads']);
+Route::get('/schedule/{id}', [ScheduleController::class, 'show']);
+Route::post('/schedule/{id}/cancel', [ScheduleController::class, 'cancel']);
+Route::get('/schedule/queue/status', [ScheduleController::class, 'queueStatus']);
 
 // Statistics routes
 Route::get('/stats/user', [StatsController::class, 'user']);
