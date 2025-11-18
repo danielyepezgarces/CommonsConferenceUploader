@@ -121,6 +121,21 @@ class ScheduledUpload
         return array_map([self::class, 'hydrate'], $stmt->fetchAll());
     }
 
+    public static function getByCancelledStatus(int $limit = 1000): array
+    {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare('
+            SELECT * FROM scheduled_uploads 
+            WHERE status = "cancelled"
+            ORDER BY updated_at DESC 
+            LIMIT ?
+        ');
+        $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return array_map([self::class, 'hydrate'], $stmt->fetchAll());
+    }
+
     public function save(): bool
     {
         $pdo = Database::getConnection();

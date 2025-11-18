@@ -197,15 +197,67 @@ You can also use standard Laravel `.env` configuration. See [.env.example](.env.
 - Assign user roles
 - View global statistics
 
+## File Storage Policy
+
+**⚠️ Important: No Permanent File Storage**
+
+CommonsEventUploader is designed to minimize disk space usage by **never storing files permanently**:
+
+- **Temporary Storage Only** - Uploaded files are stored in `storage/uploads/` temporarily
+- **Immediate Deletion After Upload** - Files are deleted immediately after successful upload to Commons
+- **Failed Upload Cleanup** - Files from failed uploads are deleted after max attempts (default: 3)
+- **Automatic Cleanup** - Hourly cron job removes orphaned files older than specified hours
+- **Cancelled Upload Cleanup** - Files from cancelled uploads can be cleaned up on demand
+
+### File Lifecycle
+
+1. User uploads file → Saved to `storage/uploads/` temporarily
+2. Queue processor runs → Uploads file to Wikimedia Commons  
+3. Upload succeeds → **File deleted immediately**
+4. Upload fails → Retries up to 3 times → **File deleted after max attempts**
+5. Hourly cleanup → Removes any orphaned files older than configured hours
+
+### Cleanup Commands
+
+```bash
+# Remove files older than 24 hours (default)
+php cleanup-files.php
+
+# Remove files older than 6 hours (aggressive cleanup for Heroku)
+php cleanup-files.php --hours=6
+
+# Remove files from cancelled uploads
+php cleanup-files.php --cancelled
+
+# Preview what would be deleted without actually deleting
+php cleanup-files.php --dry-run
+
+# Combined: aggressive cleanup + cancelled files
+php cleanup-files.php --hours=6 --cancelled
+```
+
+### Recommended Cron Setup
+
+```bash
+# Process upload queue every 5 minutes
+*/5 * * * * cd /path/to/app && php process-queue.php
+
+# Cleanup temporary files every hour (6-hour threshold for Heroku)
+0 * * * * cd /path/to/app && php cleanup-files.php --hours=6 --cancelled
+```
+
+See [HEROKU.md](HEROKU.md) for Heroku-specific deployment instructions.
+
 ## Security Features
 
 - **CSRF Protection** - All state-changing requests require CSRF token
 - **OAuth 2.0** - Secure authentication with Wikimedia
 - **Password-less** - No local password storage
-- **Token Hashing** - OAuth tokens stored as SHA-256 hashes
+- **Token Encryption** - OAuth tokens stored encrypted (AES-256-CBC)
 - **Role-Based Access** - Middleware enforces permissions
-- **File Validation** - Type and size restrictions
+- **File Validation** - Type, size, and MIME type restrictions
 - **SQL Injection Protection** - Prepared statements throughout
+- **No Permanent File Storage** - Temporary files only, deleted after upload
 
 ## Development
 

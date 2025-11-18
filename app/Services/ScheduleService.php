@@ -109,6 +109,10 @@ class ScheduleService
             $upload->status = 'completed';
             $upload->save();
 
+            // Delete the temporary file immediately after successful upload
+            $this->deleteTemporaryFile($scheduledUpload->file_path);
+            $scheduledUpload->logAction('file_deleted', 'Temporary file deleted after successful upload');
+
         } catch (\Exception $e) {
             // Increment attempts
             $scheduledUpload->attempts++;
@@ -131,8 +135,110 @@ class ScheduleService
             }
             
             $scheduledUpload->save();
+            
+            // If max attempts reached, delete the temporary file
+            if ($scheduledUpload->attempts >= $scheduledUpload->max_attempts) {
+                $this->deleteTemporaryFile($scheduledUpload->file_path);
+                $scheduledUpload->logAction('file_deleted', 'Temporary file deleted after max attempts reached');
+            }
+            
             throw $e;
         }
+    }
+
+    /**
+     * Delete temporary file from storage
+     */
+    private function deleteTemporaryFile(string $filePath): void
+    {
+        try {
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        } catch (\Exception $e) {
+            // Log error but don't fail the main process
+            error_log("Failed to delete temporary file: {$filePath}. Error: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Clean up old temporary files (files older than specified hours)
+     */
+    public static function cleanupOldFiles(int $olderThanHours = 24): array
+    {
+        $results = [
+            'scanned' => 0,
+            'deleted' => 0,
+            'failed' => 0,
+            'errors' => []
+        ];
+
+        $uploadDir = __DIR__ . '/../../storage/uploads/';
+        if (!is_dir($uploadDir)) {
+            return $results;
+        }
+
+        $cutoffTime = time() - ($olderThanHours * 3600);
+        $files = glob($uploadDir . '*');
+
+        foreach ($files as $file) {
+            if (!is_file($file)) {
+                continue;
+            }
+
+            $results['scanned']++;
+
+            // Check file modification time
+            $fileTime = filemtime($file);
+            if ($fileTime < $cutoffTime) {
+                try {
+                    if (unlink($file)) {
+                        $results['deleted']++;
+                    } else {
+                        $results['failed']++;
+                        $results['errors'][] = "Failed to delete: $file";
+                    }
+                } catch (\Exception $e) {
+                    $results['failed']++;
+                    $results['errors'][] = "Error deleting $file: " . $e->getMessage();
+                }
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * Delete cancelled upload files
+     */
+    public static function cleanupCancelledUploads(): array
+    {
+        $results = [
+            'scanned' => 0,
+            'deleted' => 0,
+            'failed' => 0
+        ];
+
+        $cancelledUploads = ScheduledUpload::getByCancelledStatus();
+
+        foreach ($cancelledUploads as $upload) {
+            $results['scanned']++;
+
+            try {
+                if (file_exists($upload->file_path)) {
+                    if (unlink($upload->file_path)) {
+                        $results['deleted']++;
+                        $upload->logAction('file_deleted', 'Cancelled upload file deleted');
+                    } else {
+                        $results['failed']++;
+                    }
+                }
+            } catch (\Exception $e) {
+                $results['failed']++;
+            }
+        }
+
+        return $results;
     }
 
     /**
