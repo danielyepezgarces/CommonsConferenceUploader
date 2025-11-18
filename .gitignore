@@ -3,6 +3,9 @@
 .env.backup
 .env.production
 
+# LocalSettings (MediaWiki-style configuration)
+LocalSettings.php
+
 # Dependencies
 /vendor/
 /node_modules/

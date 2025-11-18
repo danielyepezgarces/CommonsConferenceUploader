@@ -6,6 +6,7 @@ A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading con
 
 - **Laravel 12.x Framework** - Modern PHP framework with elegant syntax
 - **Tailwind CSS** - Beautiful, responsive UI with Vite build system (no CDN)
+- **MediaWiki-style LocalSettings** - Familiar configuration pattern for MediaWiki users
 - **OAuth 2.0 Authentication** with Wikimedia Commons
 - **Role-Based Access Control** (user, conference_admin, super_admin)
 - **Event Management** - Create and manage conference events
@@ -57,6 +58,13 @@ A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading con
    php artisan key:generate
    # Edit .env with your database and OAuth credentials
    ```
+   
+   **Optional - MediaWiki-style configuration:**
+   ```bash
+   cp LocalSettings.php.example LocalSettings.php
+   # Edit LocalSettings.php for deployment-specific settings
+   # See LocalSettings.md for complete documentation
+   ```
 
 6. **Create database:**
    ```bash
@@ -78,6 +86,32 @@ A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading con
    http://localhost:8000
    ```
 
+## Configuration Options
+
+### MediaWiki-style LocalSettings.php (Recommended)
+
+For MediaWiki administrators, CommonsEventUploader supports familiar `LocalSettings.php` configuration:
+
+```php
+<?php
+// LocalSettings.php
+$GLOBALS['wgCommonsUploader']['app_name'] = 'My Uploader';
+$GLOBALS['wgCommonsUploader']['oauth_client_id'] = 'your_client_id';
+$GLOBALS['wgCommonsUploader']['max_upload_size'] = 200 * 1024 * 1024; // 200MB
+```
+
+**Benefits:**
+- Familiar configuration pattern for MediaWiki users
+- Override any setting without modifying `.env` or config files
+- PHP-based configuration with full language features
+- Git-ignored for security
+
+See [LocalSettings.md](LocalSettings.md) for complete documentation.
+
+### Laravel .env Configuration (Alternative)
+
+You can also use standard Laravel `.env` configuration. See [.env.example](.env.example) for available options.
+
 ## OAuth 2.0 Setup
 
 1. Register your application at: https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration
@@ -86,7 +120,19 @@ A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading con
    - `highvolume` - High volume editing
    - `editpage` - Edit existing pages
    - `createeditmovepage` - Create, edit, and move pages
-3. Copy the Client ID and Client Secret to your `.env` file
+3. Configure in `LocalSettings.php` or `.env`:
+   
+   **LocalSettings.php:**
+   ```php
+   $GLOBALS['wgCommonsUploader']['oauth_client_id'] = 'your_client_id';
+   $GLOBALS['wgCommonsUploader']['oauth_client_secret'] = 'your_secret';
+   ```
+   
+   **.env:**
+   ```
+   OAUTH_CLIENT_ID=your_client_id
+   OAUTH_CLIENT_SECRET=your_secret
+   ```
 
 ## Database Schema
 
