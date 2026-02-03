@@ -1,6 +1,8 @@
 # CommonsEventUploader
 
-A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading conference-related images to Wikimedia Commons. Features OAuth 2.0 authentication, role-based access control, event management, and comprehensive statistics with a beautiful **custom CSS** interface.
+A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading conference-related images to Wikimedia Commons. Features **OAuth 2.0-only authentication** (no username/password), role-based access control, event management, and comprehensive statistics with a beautiful **custom CSS** interface.
+
+> **🔐 Authentication Note**: This application uses **OAuth 2.0 exclusively**. There is NO traditional username/password authentication. Users authenticate via their Wikimedia Commons account. See [AUTHENTICATION.md](AUTHENTICATION.md) for details.
 
 ## Features
 
@@ -8,7 +10,7 @@ A web application built with **Laravel 12.x** and **PHP 8.2+** for uploading con
 - **Composer Only** - No Node.js or build process required
 - **Custom CSS** - Beautiful, responsive UI with standalone CSS (no dependencies)
 - **MediaWiki-style LocalSettings** - Familiar configuration pattern for MediaWiki users
-- **OAuth 2.0 Authentication** with Wikimedia Commons
+- **OAuth 2.0 Authentication Only** - Secure authentication via Wikimedia Commons (no passwords stored)
 - **Role-Based Access Control** (user, conference_admin, super_admin)
 - **Event Management** - Create and manage conference events
 - **Category Management** - Organize uploads with categories
@@ -251,8 +253,8 @@ See [HEROKU.md](HEROKU.md) for Heroku-specific deployment instructions.
 ## Security Features
 
 - **CSRF Protection** - All state-changing requests require CSRF token
-- **OAuth 2.0** - Secure authentication with Wikimedia
-- **Password-less** - No local password storage
+- **OAuth 2.0 Only** - Secure authentication with Wikimedia (see [AUTHENTICATION.md](AUTHENTICATION.md))
+- **Password-less** - No local password storage or username/password authentication
 - **Token Encryption** - OAuth tokens stored encrypted (AES-256-CBC)
 - **Role-Based Access** - Middleware enforces permissions
 - **File Validation** - Type, size, and MIME type restrictions
